@@ -1,6 +1,6 @@
 const debug = require('debug')
-// debug.enable('trello--recap')
-const log = debug('trello--recap')
+// debug.enable('trello-recap')
+const log = debug('trello-recap')
 const {get} = require('got')
 
 const boardName = process.argv[2]
