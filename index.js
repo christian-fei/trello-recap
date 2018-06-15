@@ -27,11 +27,15 @@ async function main (boardName, key, token) {
   }
 
   const lists = await getBoardLists({key, token}, board.id)
-  const listsById = lists.reduce((acc, list) => Object.assign(acc, {[list.id]: list}), {})
+  const listsById = lists.reduce((acc, list) => Object.assign(acc, {
+    [list.id]: list
+  }), {})
   const listsSorted = lists.sort((l1, l2) => l1.pos - l2.pos)
 
   const cards = await getBoardCards({key, token}, board.id, since)
-  const cardsWithList = cards.map(c => Object.assign(c, {list: listsById[c.idList]}))
+  const cardsWithList = cards.map(c => Object.assign(c, {
+    list: listsById[c.idList]
+  }))
   const cardsPerList = cardsWithList.reduce((acc, curr) => Object.assign(acc, {
     [curr.idList]: (acc[curr.idList] || []).concat([curr])
   }), {})
