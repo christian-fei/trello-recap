@@ -3,7 +3,7 @@
 # trello-recap
 
 ```
-npm i -g trello--replay
+npm i -g trello-replay
 ```
 
 ## configuration
