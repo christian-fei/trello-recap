@@ -3,7 +3,7 @@
 # trello-recap
 
 ```
-npm i -g trello-replay
+npm i -g trello-recap
 ```
 
 
@@ -36,7 +36,7 @@ trello-recap --board "TRELLO_BOARD_NAME" --since "2018-02-01"
 or with `npx`
 
 ```
-npx trello-replay --board "TRELLO_BOARD_NAME"  --since "2018-02-01"
+npx trello-recap --board "TRELLO_BOARD_NAME"  --since "2018-02-01"
 ```
 
 [SINCE_DATE] is optional.
