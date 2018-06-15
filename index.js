@@ -5,10 +5,17 @@ const debug = require('debug')
 const log = debug('trello-recap')
 const {get} = require('got')
 
-const boardName = process.argv[2]
-const since = process.argv[3]
+parse(process.argv)
+
 const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
 const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
+
+if (!key || !token) {
+  process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
+  process.exit(1)
+}
+
+const {board: boardName, since} = parse(process.argv)
 
 if (!boardName) {
   process.stdout.write(`Please provide a valid board name`)
@@ -100,6 +107,20 @@ function cardToString (card) {
 
 function listToString (list) {
   return `\n📋   "${list.name}"\n`
+}
+
+function parse (args) {
+  log('args', args)
+  const sinceIndex = args.indexOf('--since')
+  const boardIndex = args.indexOf('--board')
+  let board = boardIndex >= 0 ? args[boardIndex + 1] : undefined
+  let since = sinceIndex >= 0 ? args[sinceIndex + 1] : undefined
+  if (!board) board = args[2]
+
+  return {
+    board,
+    since
+  }
 }
 
 process.on('unhandledRejection', console.error)
