@@ -6,6 +6,7 @@
 npm i -g trello-replay
 ```
 
+
 ## configuration
 
 Get an API Key and Token from Trello.
@@ -23,6 +24,15 @@ TRELLO_API_TOKEN
 ```
 trello-recap [BOARD_NAME] [SINCE_DATE]
 ```
+
+or with `npx`
+
+```
+npx trello-replay [BOARD_NAME] [SINCE_DATE]
+```
+
+[SINCE_DATE] is optional.
+
 
 ### options
 
