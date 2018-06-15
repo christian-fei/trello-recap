@@ -29,8 +29,6 @@ async function main (boardName, key, token) {
     [list.id]: list.name
   }), {}))
 
-  console.log('lists', lists)
-
   const cards = await getBoardCards(board.id, since)
   log('cards')
   log(cards[0])
