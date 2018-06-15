@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const debug = require('debug')
 // debug.enable('trello-recap')
 const log = debug('trello-recap')
