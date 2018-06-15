@@ -23,6 +23,14 @@ async function main (boardName, key, token) {
     process.stdout.write('could not find board')
     process.stdout.write(`available boards are ${boards.map(b => b.name).join('\n')}`)
   }
+
+  const lists = await getBoardLists(board.id).then(lists => lists.reduce((lists, list) => ({
+    ...lists,
+    [list.id]: list.name
+  }), {}))
+
+  console.log('lists', lists)
+
   const cards = await getBoardCards(board.id, since)
   log('cards')
   log(cards[0])
@@ -35,9 +43,14 @@ async function main (boardName, key, token) {
     return get(url, {json: true}).then(r => r.body)
   }
 
+  function getBoardLists (boardId) {
+    let url = `https://api.trello.com/1/boards/${boardId}/lists?key=${key}&token=${token}`
+    log('-> getBoardLists', boardId)
+    return get(url, {json: true}).then(r => r.body)
+  }
+
   function getBoardCards (boardId, since) {
     let url = `https://api.trello.com/1/boards/${boardId}/cards?key=${key}&token=${token}`
-    // if (since) url += `&since=${since}`
     log('-> getBoardCards', boardId)
     return get(url, {json: true})
       .then(r => r.body)
@@ -55,6 +68,7 @@ async function main (boardName, key, token) {
     return `
 📋   ${card.name}
 ${card.labels ? `  labels: ${card.labels.map(l => l.name).join(', ')}` : ''}
+  list: ${lists[card.idList]}
 `
   }
 }
