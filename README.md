@@ -18,6 +18,7 @@ TRELLO_API_KEY
 TRELLO_API_TOKEN
 ```
 
+You can do from it here: https://trello.com/app-key
 
 ## usage
 
