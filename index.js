@@ -87,21 +87,15 @@ function cardToString (card) {
   return [
     `⚡️        ${card.name}`,
     `\n    🔗    ${card.url}`,
-    card.labels.length > 0 ? `\n    ${labelsToString(card.labels)}` : false,
-    card.members.length > 0 ? `\n    ${membersToString(card.members)}` : false,
+    card.labels.length === 0 ? false
+      : `\n    🏷    ${card.labels.map(l => l.name).join(', ')}`,
+    card.members.length === 0 ? false
+      : `\n    ${card.members.length === 1 ? '👤' : '👥'}    ${card.members.map(m => m.fullName).join(', ')}`,
     `\n`,
     `\n`
   ]
   .filter(Boolean)
   .join('')
-}
-
-function labelsToString (labels) {
-  return `🏷    ${labels.map(l => l.name).join(', ')}`
-}
-
-function membersToString (members) {
-  return `👤    ${members.map(m => m.fullName).join(', ')}`
 }
 
 function listToString (list) {
