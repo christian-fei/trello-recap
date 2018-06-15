@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "debug": "^3.1.0",
-    "got": "^8.3.1"
+    "debug": "^3.1.0"
   }
 }

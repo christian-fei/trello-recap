@@ -3,7 +3,7 @@
 const debug = require('debug')
 // debug.enable('trello-recap')
 const log = debug('trello-recap')
-const {get} = require('got')
+const https = require('https')
 
 parse(process.argv)
 
@@ -62,26 +62,26 @@ async function main ({key, token}, {boardName, since}) {
 function getBoards ({key, token}) {
   const url = `https://api.trello.com/1/members/me/boards?key=${key}&token=${token}`
   log('-> getBoards')
-  return get(url, {json: true}).then(r => r.body)
+  return get(url, {json: true})
 }
 
 function getBoardLists ({key, token}, boardId) {
   let url = `https://api.trello.com/1/boards/${boardId}/lists?key=${key}&token=${token}`
   log('-> getBoardLists', boardId)
-  return get(url, {json: true}).then(r => r.body)
+  return get(url, {json: true})
 }
 
 function getBoardMembers ({key, token}, boardId) {
   let url = `https://api.trello.com/1/boards/${boardId}/members?key=${key}&token=${token}`
   log('-> getBoardMembers', boardId)
-  return get(url, {json: true}).then(r => r.body)
+  return get(url, {json: true})
 }
 
 function getBoardCards ({key, token}, {boardId, since}) {
   let url = `https://api.trello.com/1/boards/${boardId}/cards?key=${key}&token=${token}`
   log('-> getBoardCards', boardId)
   return get(url, {json: true})
-    .then(r => r.body)
+
     .then(cards => {
       if (!since) return cards
       return cards.filter(c => {
@@ -122,6 +122,37 @@ function parse (args) {
   return {
     board,
     since
+  }
+}
+
+async function get (url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, res => {
+      if (res.statusCode !== 200) return reject(res.statusMessage)
+      toString(res, (err, string) => {
+        if (err) return reject(new Error(err))
+        if (!string) return reject(new Error(string))
+        try {
+          const json = JSON.parse(string)
+          resolve(json)
+        } catch (err) {
+          reject(err)
+        }
+      })
+    })
+  })
+
+  function toBuffer (stream, fn, chunks = []) {
+    stream.on('error', err => fn(err))
+    stream.on('data', chunk => chunks.push(chunk))
+    stream.on('end', data => fn(null, Buffer.concat(chunks)))
+  }
+
+  function toString (stream, fn) {
+    return toBuffer(stream, (err, buffer) => {
+      if (err) return fn(new Error(err))
+      fn(null, buffer.toString())
+    })
   }
 }
 
