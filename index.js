@@ -26,18 +26,22 @@ async function main (boardName, key, token) {
     process.stdout.write(`available boards are ${boards.map(b => b.name).join('\n')}`)
   }
 
-  const lists = await getBoardLists({key, token}, board.id).then(lists => lists.reduce((lists, list) => ({
-    ...lists,
-    [list.id]: list.name
-  }), {}))
+  const lists = await getBoardLists({key, token}, board.id)
+  const listsById = lists.reduce((acc, list) => Object.assign(acc, {[list.id]: list}), {})
+  const listsSorted = lists.sort((l1, l2) => l1.pos - l2.pos)
 
   const cards = await getBoardCards({key, token}, board.id, since)
-  log('cards')
-  log(cards[0])
+  const cardsWithList = cards.map(c => Object.assign(c, {list: listsById[c.idList]}))
+  const cardsPerList = cardsWithList.reduce((acc, curr) => Object.assign(acc, {
+    [curr.idList]: (acc[curr.idList] || []).concat([curr])
+  }), {})
 
-  cards
-    .map(c => toString(c, lists))
-    .forEach(c => process.stdout.write(c))
+  for (const list of listsSorted) {
+    process.stdout.write(listToString(list))
+    for (const card of cardsPerList[list.id]) {
+      process.stdout.write(cardToString(card))
+    }
+  }
 }
 
 function getBoards ({key, token}) {
@@ -67,10 +71,20 @@ function getBoardCards ({key, token}, boardId, since) {
     })
 }
 
-function toString (card, lists) {
-  return `
-📋   ${card.name}
-${card.labels ? `  labels: ${card.labels.map(l => l.name).join(', ')}` : ''}
-list: ${lists[card.idList]}
-`
+function cardToString (card) {
+  return [
+    `⚡️   ${card.name}`,
+    card.labels.length > 0 ? `\n    ${labelsToString(card.labels)}` : false,
+    `\n`
+  ]
+  .filter(Boolean)
+  .join('')
+}
+
+function labelsToString (labels) {
+  return `labels: ${labels.map(l => l.name).join(', ')}`
+}
+
+function listToString (list) {
+  return `\n📋   "${list.name}" (${list.id})\n`
 }
