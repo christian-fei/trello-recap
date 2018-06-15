@@ -34,11 +34,13 @@ async function main ({key, token}, {boardName, since}) {
     process.stdout.write(`available boards are:\n ${boards.map(b => b.name).join('\n ')}`)
   }
 
-  const members = await getBoardMembers({key, token}, board.id)
-  const lists = await getBoardLists({key, token}, board.id)
+  const boardId = board.id
+
+  const members = await getBoardMembers({key, token}, boardId)
+  const lists = await getBoardLists({key, token}, boardId)
   const listsSorted = lists.sort((l1, l2) => l1.pos - l2.pos)
 
-  let cards = await getBoardCards({key, token}, board.id, since)
+  let cards = await getBoardCards({key, token}, {boardId, since})
   cards = cards.map(c => Object.assign(c, {
     list: lists.find(l => l.id === c.idList),
     members: members.filter(m => c.idMembers.includes(m.id))
@@ -75,7 +77,7 @@ function getBoardMembers ({key, token}, boardId) {
   return get(url, {json: true}).then(r => r.body)
 }
 
-function getBoardCards ({key, token}, boardId, since) {
+function getBoardCards ({key, token}, {boardId, since}) {
   let url = `https://api.trello.com/1/boards/${boardId}/cards?key=${key}&token=${token}`
   log('-> getBoardCards', boardId)
   return get(url, {json: true})
