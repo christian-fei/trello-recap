@@ -22,14 +22,21 @@ You can do from it here: https://trello.com/app-key
 
 ## usage
 
+`--board` is needed.
+
+> Tip: You can also pass it as first argument:
+> trello-recap "TRELLO_BOARD_NAME" --since "2018-02-01"
+
+`--since` is optional, ISO Date formatted string. e.g. `2018-02-01`
+
 ```
-trello-recap [BOARD_NAME] [SINCE_DATE]
+trello-recap --board "TRELLO_BOARD_NAME" --since "2018-02-01"
 ```
 
 or with `npx`
 
 ```
-npx trello-replay [BOARD_NAME] [SINCE_DATE]
+npx trello-replay "TRELLO_BOARD_NAME" "2018-02-01"
 ```
 
 [SINCE_DATE] is optional.
