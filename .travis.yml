@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "9"
+script:
+- echo "pass"
+deploy:
+  provider: npm
+  email: crifei93@gmail.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
