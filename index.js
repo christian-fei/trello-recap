@@ -23,7 +23,7 @@ async function main (boardName, key, token) {
     process.stdout.write('could not find board')
     process.stdout.write(`available boards are ${boards.map(b => b.name).join('\n')}`)
   }
-  const cards = await getBoardCards(board.id)
+  const cards = await getBoardCards(board.id, since)
   log('cards')
   log(cards[0])
 
@@ -37,9 +37,18 @@ async function main (boardName, key, token) {
 
   function getBoardCards (boardId, since) {
     let url = `https://api.trello.com/1/boards/${boardId}/cards?key=${key}&token=${token}`
-    if (since) url += `&since=${since}`
+    // if (since) url += `&since=${since}`
     log('-> getBoardCards', boardId)
-    return get(url, {json: true}).then(r => r.body)
+    return get(url, {json: true})
+      .then(r => r.body)
+      .then(cards => {
+        if (!since) return cards
+        return cards.filter(c => {
+          const dateLastActivity = new Date(c.dateLastActivity)
+          const filterSince = new Date(since)
+          return dateLastActivity > filterSince
+        })
+      })
   }
 
   function toString (card) {
