@@ -22,9 +22,9 @@ if (!boardName) {
   process.exit(1)
 }
 
-main(boardName, key, token)
+main({key, token}, {boardName, since})
 
-async function main (boardName, key, token) {
+async function main ({key, token}, {boardName, since}) {
   process.stdout.write(`👌   Loading cards for ${boardName}\n`)
   const boards = await getBoards({key, token})
   const board = boards.find(b => b.name === boardName)
