@@ -32,6 +32,7 @@ async function main ({key, token}, {boardName, since}) {
   if (!board) {
     process.stdout.write('could not find board')
     process.stdout.write(`available boards are:\n ${boards.map(b => b.name).join('\n ')}`)
+    process.exit(1)
   }
 
   const boardId = board.id
