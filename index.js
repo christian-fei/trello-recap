@@ -7,25 +7,28 @@ const https = require('https')
 
 parse(process.argv)
 
-const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
-const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
+if (require.main === module) {
+  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
+  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
 
-if (!key || !token) {
-  process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
-  process.exit(1)
+  if (!key || !token) {
+    process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
+    process.exit(1)
+  }
+  const {board: boardName, since} = parse(process.argv)
+
+  main({key, token}, {boardName, since})
+} else {
+  module.exports = {main, toMD}
 }
-
-const {board: boardName, since} = parse(process.argv)
-
-if (!boardName) {
-  process.stdout.write(`Please provide a valid board name`)
-  process.exit(1)
-}
-
-main({key, token}, {boardName, since})
 
 async function main ({key, token}, {boardName, since}) {
-  process.stdout.write(`👌   Loading cards for ${boardName}\n`)
+  if (!boardName) {
+    process.stdout.write(`Please provide a valid board name`)
+    process.exit(1)
+  }
+
+  process.stdout.write(`Loading cards for ${boardName}\n`)
   const boards = await getBoards({key, token})
   const board = boards.find(b => b.name === boardName)
 
@@ -53,7 +56,9 @@ async function main ({key, token}, {boardName, since}) {
 
   for (const list of listsSorted) {
     if (!cardsPerList[list.id]) continue
-    process.stdout.write(listToString(list))
+    process.stdout.write('\n')
+    process.stdout.write(toMD({type: 'h1', text: listToString(list)}))
+    process.stdout.write('\n')
     for (const card of cardsPerList[list.id]) {
       process.stdout.write(cardToString(card))
     }
@@ -95,12 +100,12 @@ function getBoardCards ({key, token}, {boardId, since}) {
 
 function cardToString (card) {
   return [
-    `⚡️        ${card.name}`,
-    `\n    🔗    ${card.url}`,
+    toMD({text: `${card.name}`, type: 'h2'}),
+    toMD({text: `\n${card.url}`}),
     card.labels.length === 0 ? false
-      : `\n    🏷    ${card.labels.map(l => l.name).join(', ')}`,
+      : toMD({text: `\n${card.labels.map(l => l.name).join(', ')}`}),
     card.members.length === 0 ? false
-      : `\n    ${card.members.length === 1 ? '👤' : '👥'}    ${card.members.map(m => m.fullName).join(', ')}`,
+      : toMD({text: `\n${card.members.map(m => m.fullName).join(', ')}`}),
     `\n`,
     `\n`
   ]
@@ -109,7 +114,7 @@ function cardToString (card) {
 }
 
 function listToString (list) {
-  return `\n📋   "${list.name}"\n`
+  return `${list.name}\n`
 }
 
 function parse (args) {
@@ -155,6 +160,12 @@ async function get (url) {
       fn(null, buffer.toString())
     })
   }
+}
+
+function toMD ({type, text} = {}) {
+  if (type === 'h1') return `# ${text}`
+  if (type === 'h2') return `## ${text}`
+  return text
 }
 
 process.on('unhandledRejection', console.error)
