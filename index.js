@@ -101,11 +101,12 @@ function getBoardCards ({key, token}, {boardId, since}) {
 function cardToString (card) {
   return [
     toMD({text: `${card.name}`, type: 'h2'}),
-    toMD({text: `\n${card.url}`}),
+    toMD({text: `\nLink: ${card.url}`}),
     card.labels.length === 0 ? false
-      : toMD({text: `\n${card.labels.map(l => l.name).join(', ')}`}),
+      : toMD({text: `\nLabels: ${card.labels.map(l => l.name).join(', ')}`}),
     card.members.length === 0 ? false
-      : toMD({text: `\n${card.members.map(m => m.fullName).join(', ')}`}),
+      : toMD({text: `\nMembers: ${card.members.map(m => m.fullName).join(', ')}`}),
+    toMD({text: `\nDate last activity: ${card.dateLastActivity}`}),
     `\n`,
     `\n`
   ]
