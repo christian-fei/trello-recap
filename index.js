@@ -15,14 +15,14 @@ if (require.main === module) {
     process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
     process.exit(1)
   }
-  const {board: boardName, since} = parse(process.argv)
+  const {board: boardName, since, member} = parse(process.argv)
 
-  main({key, token}, {boardName, since})
+  main({key, token}, {boardName, since, member})
 } else {
   module.exports = {main, toMD}
 }
 
-async function main ({key, token}, {boardName, since}) {
+async function main ({key, token}, {boardName, since, member}) {
   if (!boardName) {
     process.stdout.write(`Please provide a valid board name`)
     process.exit(1)
@@ -49,6 +49,10 @@ async function main ({key, token}, {boardName, since}) {
     list: lists.find(l => l.id === c.idList),
     members: members.filter(m => c.idMembers.includes(m.id))
   }))
+  .filter(c => {
+    if (!member) return true
+    return c.members.some(m => m.username === member)
+  })
 
   const cardsPerList = cards.reduce((acc, curr) => Object.assign(acc, {
     [curr.idList]: (acc[curr.idList] || []).concat([curr])
@@ -132,14 +136,13 @@ function parse (args) {
   log('args', args)
   const sinceIndex = args.indexOf('--since')
   const boardIndex = args.indexOf('--board')
+  const memberIndex = args.indexOf('--member')
   let board = boardIndex >= 0 ? args[boardIndex + 1] : undefined
   let since = sinceIndex >= 0 ? args[sinceIndex + 1] : undefined
+  let member = memberIndex >= 0 ? args[memberIndex + 1] : undefined
   if (!board) board = args[2]
 
-  return {
-    board,
-    since
-  }
+  return { board, since, member }
 }
 
 async function get (url) {
