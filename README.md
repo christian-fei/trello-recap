@@ -29,6 +29,8 @@ Get the keys from here: https://trello.com/app-key
 
 `--since` is optional, ISO Date formatted string. e.g. `2018-02-01`
 
+`--member` is optional, username of a member (e.g. `christianfei`)
+
 ```
 trello-recap --board "TRELLO_BOARD_NAME" --since "2018-02-01"
 ```
@@ -39,17 +41,19 @@ or with `npx`
 npx trello-recap --board "TRELLO_BOARD_NAME"  --since "2018-02-01"
 ```
 
-[SINCE_DATE] is optional.
-
 
 ### options
 
-#### BOARD_NAME
+#### --board
 
 Specify the name of the board.
 
 > Tip: put it between "" when passing it to the cli
 
-#### SINCE_DATE
+#### --since
 
 Filter cards after that date
+
+#### --member
+
+Filter cards assigned to a member
