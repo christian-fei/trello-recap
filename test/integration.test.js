@@ -2,7 +2,7 @@
 const { equal, ok } = require('assert')
 const { main } = require('..')
 
-test('loads cards from board', async (done) => {
+test('loads cards, lists and members from board', async (done) => {
   const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
   const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const boardName = 'trello-recap-integration-tests'
