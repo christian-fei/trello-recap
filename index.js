@@ -63,6 +63,16 @@ async function main ({key, token}, {boardName, since}) {
       process.stdout.write(cardToString(card))
     }
   }
+
+  return {
+    boards,
+    board,
+    members,
+    lists,
+    listsSorted,
+    cards,
+    cardsPerList
+  }
 }
 
 function getBoards ({key, token}) {
