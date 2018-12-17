@@ -15,14 +15,14 @@ if (require.main === module) {
     process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
     process.exit(1)
   }
-  const {board: boardName, since, member} = parse(process.argv)
+  const {board: boardName, since, member, list} = parse(process.argv)
 
-  main({key, token}, {boardName, since, member})
+  main({key, token}, {boardName, since, member, list})
 } else {
   module.exports = {main, toMD}
 }
 
-async function main ({key, token}, {boardName, since, member}) {
+async function main ({key, token}, {boardName, since, member, list}) {
   if (!boardName) {
     process.stdout.write(`Please provide a valid board name`)
     process.exit(1)
@@ -41,7 +41,8 @@ async function main ({key, token}, {boardName, since, member}) {
   const boardId = board.id
 
   const members = await getBoardMembers({key, token}, boardId)
-  const lists = await getBoardLists({key, token}, boardId)
+  let lists = await getBoardLists({key, token}, boardId)
+  lists = list ? lists.filter(l => list && l.name.includes(list)) : lists
   const listsSorted = lists.sort((l1, l2) => l1.pos - l2.pos)
 
   let cards = await getBoardCards({key, token}, {boardId, since})

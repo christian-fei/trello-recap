@@ -26,3 +26,13 @@ test('filters cards by member', async (done) => {
   equal(cards.length, 1)
   done()
 })
+
+test('filters lists by name', async (done) => {
+  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
+  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
+  const list = 'done'
+  const {lists} = await main({key, token}, {boardName, list})
+  ok(lists)
+  equal(lists.length, 1)
+  done()
+})
