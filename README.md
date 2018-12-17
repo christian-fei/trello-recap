@@ -31,6 +31,8 @@ Get the keys from here: https://trello.com/app-key
 
 `--member` is optional, username of a member (e.g. `christianfei`)
 
+`--list` is optional, filter lists by name (e.g. `done`)
+
 ```
 trello-recap --board "TRELLO_BOARD_NAME" --since "2018-02-01"
 ```
@@ -57,3 +59,7 @@ Filter cards after that date
 #### --member
 
 Filter cards assigned to a member
+
+#### --list
+
+Filter lists by name
