@@ -18,7 +18,7 @@ async function main () {
     process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
     process.exit(1)
   }
-  const {board: boardName, since, member, list} = parseArgv(process.argv)
+  const {board: boardName, since, member, list: listName} = parseArgv(process.argv)
 
   if (!boardName) {
     process.stdout.write(`Please provide a valid board name`)
@@ -26,7 +26,7 @@ async function main () {
   }
 
   process.stdout.write(`Loading cards for ${boardName}\n`)
-  const result = await trelloRecap({key, token}, {boardName, since, member, list})
+  const result = await trelloRecap({key, token}, {boardName, since, member, listName})
 
   if (result.errors) {
     console.log(JSON.stringify(result.errors))

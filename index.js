@@ -4,7 +4,7 @@ const { getBoardCards, getBoardMembers, getBoardLists, getBoards } = require('./
 
 module.exports = main
 
-async function main ({key, token}, {boardName, since, member, list}) {
+async function main ({key, token}, {boardName, since, member, listName}) {
   if (!boardName) {
     return { errors: ['missing board name'] }
   }
@@ -20,7 +20,7 @@ async function main ({key, token}, {boardName, since, member, list}) {
 
   const members = await getBoardMembers({key, token}, boardId)
   let lists = await getBoardLists({key, token}, boardId)
-  lists = list ? lists.filter(l => list && l.name.includes(list)) : lists
+  lists = listName ? lists.filter(l => listName && l.name.toLowerCase().includes(listName)) : lists
   const listsSorted = lists.sort((l1, l2) => l1.pos - l2.pos)
 
   let cards = await getBoardCards({key, token}, {boardId, since})
