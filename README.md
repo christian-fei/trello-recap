@@ -34,6 +34,10 @@ Get the keys from here: https://trello.com/app-key
 `--list` is optional, filter lists by name (e.g. `done`)
 
 ```
+# set env variables
+TRELLO_API_KEY=<YOUR_TRELLO_API_KEY>
+TRELLO_API_TOKEN=<YOUR_TRELLO_API_TOKEN>
+
 trello-recap --board "TRELLO_BOARD_NAME" --since "2018-02-01"
 ```
 
