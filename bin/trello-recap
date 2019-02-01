@@ -10,18 +10,37 @@ process.on('unhandledRejection', console.error)
 
 main()
 
+function help () {
+  return `
+  ## usage
+
+  --board is needed.
+
+  > Tip: You can also pass it as first argument:
+  > trello-recap "TRELLO_BOARD_NAME" --since "2018-02-01"
+
+  --since is optional, ISO Date formatted string. e.g. "2018-02-01"
+
+  --member is optional, username of a member (e.g. christianfei)
+
+  --list is optional, filter lists by name (e.g. done)
+  `
+}
+
 async function main () {
   const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
   const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
 
   if (!key || !token) {
     process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
+    help()
     process.exit(1)
   }
   const {board: boardName, since, member, list: listName} = parseArgv(process.argv)
 
   if (!boardName) {
-    process.stdout.write(`Please provide a valid board name`)
+    process.stderr.write(`Please provide a valid board name`)
+    help()
     process.exit(1)
   }
 
@@ -29,7 +48,8 @@ async function main () {
   const result = await trelloRecap({key, token}, {boardName, since, member, listName})
 
   if (result.errors) {
-    console.log(JSON.stringify(result.errors))
+    process.stderr.write(JSON.stringify(result.errors))
+    help()
     process.exit(1)
   }
 
