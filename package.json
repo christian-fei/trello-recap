@@ -2,7 +2,7 @@
   "name": "trello-recap",
   "version": "1.7.0",
   "description": "",
-  "bin": "index.js",
+  "bin": "bin/trello-recap",
   "main": "index.js",
   "scripts": {
     "test": "m.test",

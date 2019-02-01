@@ -1,6 +1,6 @@
 /* globals test */
-const { equal, ok } = require('assert')
-const { toMD } = require('..')
+const { equal } = require('assert')
+const toMD = require('../lib/to-md')
 
 test('to-md: h1', () => {
   const md = toMD({type: 'h1', text: 'text'})

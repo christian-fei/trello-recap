@@ -1,6 +1,6 @@
 /* globals test */
 const { equal, ok } = require('assert')
-const { main } = require('..')
+const main = require('..')
 
 const boardName = 'trello-recap-integration-tests'
 

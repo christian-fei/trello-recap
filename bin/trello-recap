@@ -1,0 +1,51 @@
+#! /usr/bin/env node
+
+const parseArgv = require('../lib/parse-argv')
+const toMD = require('../lib/to-md')
+const cardToString = require('../lib/card-to-string')
+
+const trelloRecap = require('..')
+
+process.on('unhandledRejection', console.error)
+
+main()
+
+async function main () {
+  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
+  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
+
+  if (!key || !token) {
+    process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
+    process.exit(1)
+  }
+  const {board: boardName, since, member, list} = parseArgv(process.argv)
+
+  if (!boardName) {
+    process.stdout.write(`Please provide a valid board name`)
+    process.exit(1)
+  }
+
+  process.stdout.write(`Loading cards for ${boardName}\n`)
+  const result = await trelloRecap({key, token}, {boardName, since, member, list})
+
+  if (result.errors) {
+    console.log(JSON.stringify(result.errors))
+    process.exit(1)
+  }
+
+  for (const list of result.listsSorted) {
+    if (!result.cardsPerList[list.id]) continue
+    process.stdout.write('\n')
+    process.stdout.write(toMD({type: 'h1', text: listToString(list)}))
+    process.stdout.write('\n')
+    for (const card of result.cardsPerList[list.id]) {
+      process.stdout.write(cardToString(card))
+    }
+  }
+
+  process.exit(0)
+}
+
+function listToString (list) {
+  return `${list.name}\n`
+}
