@@ -1,6 +1,6 @@
 {
   "name": "trello-recap",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "",
   "bin": "bin/trello-recap",
   "main": "index.js",
