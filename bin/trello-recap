@@ -33,14 +33,14 @@ async function main () {
 
   if (!key || !token) {
     process.stderr.write(`Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your env.\n`)
-    help()
+    process.stderr.write(help())
     process.exit(1)
   }
   const {board: boardName, since, member, list: listName} = parseArgv(process.argv)
 
   if (!boardName) {
     process.stderr.write(`Please provide a valid board name`)
-    help()
+    process.stderr.write(help())
     process.exit(1)
   }
 
@@ -49,7 +49,7 @@ async function main () {
 
   if (result.errors) {
     process.stderr.write(JSON.stringify(result.errors))
-    help()
+    process.stderr.write(help())
     process.exit(1)
   }
 
