@@ -34,7 +34,7 @@ async function main ({key, token}, {boardName, since, member, listName, labelNam
   })
   .filter(c => {
     if (!labelName) return true
-    const result = c.labels.some(l => l.name === labelName)
+    const result = c.labels.some(label => label.name.toLowerCase().includes(labelName))
     return result
   })
 
