@@ -39,8 +39,8 @@ test('filters lists by name', async (done) => {
 test('filters cards by label', async (done) => {
   const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
   const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
-  const label = 'Bug'
-  const {cards} = await main({key, token}, {boardName, label})
+  const labelName = 'Bug'
+  const {cards} = await main({key, token}, {boardName, labelName})
   ok(cards)
   equal(cards.length, 2)
   done()

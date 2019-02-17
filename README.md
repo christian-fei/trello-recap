@@ -33,6 +33,8 @@ Get the keys from here: https://trello.com/app-key
 
 `--list` is optional, filter lists by name (e.g. `done`)
 
+`--label` is optional, filter cards by label (e.g. `bug`)
+
 ```
 # set env variables
 TRELLO_API_KEY=<YOUR_TRELLO_API_KEY>

@@ -4,7 +4,7 @@ const { getBoardCards, getBoardMembers, getBoardLists, getBoards } = require('./
 
 module.exports = main
 
-async function main ({key, token}, {boardName, since, member, listName}) {
+async function main ({key, token}, {boardName, since, member, listName, labelName}) {
   if (!boardName) {
     return { errors: ['missing board name'] }
   }
@@ -26,11 +26,16 @@ async function main ({key, token}, {boardName, since, member, listName}) {
   let cards = await getBoardCards({key, token}, {boardId, since})
   cards = cards.map(c => Object.assign(c, {
     list: lists.find(l => l.id === c.idList),
-    members: members.filter(m => c.idMembers.includes(m.id))
+    members: members.filter(m => c.idMembers.includes(m.id)),
   }))
   .filter(c => {
     if (!member) return true
     return c.members.some(m => m.username === member)
+  })
+  .filter(c => {
+    if (!labelName) return true
+    const result = c.labels.some(l => l.name === labelName)
+    return result
   })
 
   const cardsPerList = cards.reduce((acc, curr) => Object.assign(acc, {

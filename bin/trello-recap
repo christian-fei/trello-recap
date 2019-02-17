@@ -24,6 +24,8 @@ function help () {
   --member is optional, username of a member (e.g. christianfei)
 
   --list is optional, filter lists by name (e.g. done)
+  
+  --label is optional, filter cards by label (e.g. bug)
   `
 }
 
@@ -36,7 +38,7 @@ async function main () {
     process.stderr.write(help())
     process.exit(1)
   }
-  const {board: boardName, since, member, list: listName} = parseArgv(process.argv)
+  const {board: boardName, since, member, list: listName, label: labelName} = parseArgv(process.argv)
 
   if (!boardName) {
     process.stderr.write(`Please provide a valid board name`)
@@ -45,7 +47,7 @@ async function main () {
   }
 
   process.stdout.write(`Loading cards for ${boardName}\n`)
-  const result = await trelloRecap({key, token}, {boardName, since, member, listName})
+  const result = await trelloRecap({key, token}, {boardName, since, member, listName, labelName})
 
   if (result.errors) {
     process.stderr.write(JSON.stringify(result.errors))
