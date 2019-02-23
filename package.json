@@ -5,6 +5,7 @@
   "bin": "bin/trello-recap",
   "main": "index.js",
   "scripts": {
+    "bin": "bin/trello-recap",
     "test": "m.test",
     "start": "node $npm_package_main"
   },

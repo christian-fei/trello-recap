@@ -9,7 +9,7 @@ const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_
 
 // here is the public board used in the tests: https://trello.com/b/www9vXPI/trello-recap-integration-tests
 
-test('loads cards, lists and members from board', async (done) => {
+test('integration: loads cards, lists and members from board', async (done) => {
   const { cards, lists, members } = await main({ key, token }, { boardName })
   assert.ok(cards)
   assert.strictEqual(cards.length, 4)
@@ -20,14 +20,14 @@ test('loads cards, lists and members from board', async (done) => {
   done()
 })
 
-test('filters cards by member', async (done) => {
+test('integration: filters cards by member', async (done) => {
   const { cards } = await main({ key, token }, { boardName, member })
   assert.ok(cards)
   assert.strictEqual(cards.length, 2)
   done()
 })
 
-test('filters lists by name', async (done) => {
+test('integration: filters lists by name', async (done) => {
   const listName = 'done'
   const { lists } = await main({ key, token }, { boardName, listName })
   assert.ok(lists)
@@ -35,7 +35,7 @@ test('filters lists by name', async (done) => {
   done()
 })
 
-test('filters cards by label', async (done) => {
+test('integration: filters cards by label', async (done) => {
   const labelName = 'bug'
   const { cards } = await main({ key, token }, { boardName, labelName })
   assert.ok(cards)
@@ -43,7 +43,7 @@ test('filters cards by label', async (done) => {
   done()
 })
 
-test('calculate effort per list', async (done) => {
+test('integration: calculate effort per list', async (done) => {
   const { lists, effortPerList } = await main({ key, token }, { boardName, showEffort: true })
   assert.ok(lists)
   assert.strictEqual(lists.length, 3)
