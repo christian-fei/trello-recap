@@ -45,7 +45,7 @@ async function main ({key, token}, {boardName, since, member, listName, labelNam
   const statsPerList = listsSorted.map((list) => {
     return cardsPerList[list.id] ? cardsPerList[list.id].reduce((stats, card) => {
       const parsedName = /\(\d+/g.exec(card.name)
-      const effort = parsedName ? parseInt(parsedName[0].substr(1)) : 0
+      const effort = parsedName ? parseInt(parsedName[0].substr(1)) : 1
       if (card.labels) {
         card.labels.map(label => !stats[label.name] ? stats[label.name] = effort : stats[label.name] += effort)
       }
