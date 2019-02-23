@@ -4,7 +4,7 @@ const { getBoardCards, getBoardMembers, getBoardLists, getBoards } = require('./
 
 module.exports = main
 
-async function main ({key, token}, {boardName, since, member, listName, labelName}) {
+async function main ({key, token}, {boardName, since, member, listName, labelName, showEffort}) {
   if (!boardName) {
     return { errors: ['missing board name'] }
   }
@@ -42,14 +42,14 @@ async function main ({key, token}, {boardName, since, member, listName, labelNam
     [curr.idList]: (acc[curr.idList] || []).concat([curr])
   }), {})
 
-  const statsPerList = listsSorted.map((list) => {
-    return cardsPerList[list.id] ? cardsPerList[list.id].reduce((stats, card) => {
+  const effortPerList = !showEffort ? [] : listsSorted.map((list) => {
+    return cardsPerList[list.id] ? cardsPerList[list.id].reduce((effort, card) => {
       const parsedName = /\(\d+/g.exec(card.name)
-      const effort = parsedName ? parseInt(parsedName[0].substr(1)) : 1
+      const count = parsedName ? parseInt(parsedName[0].substr(1)) : 1
       if (card.labels) {
-        card.labels.map(label => !stats[label.name] ? stats[label.name] = effort : stats[label.name] += effort)
+        card.labels.map(label => !effort[label.name] ? effort[label.name] = count : effort[label.name] += count)
       }
-      return stats
+      return effort
     }, {}) : {}
   })
 
@@ -61,6 +61,6 @@ async function main ({key, token}, {boardName, since, member, listName, labelNam
     listsSorted,
     cards,
     cardsPerList,
-    statsPerList
+    effortPerList
   }
 }

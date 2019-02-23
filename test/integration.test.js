@@ -46,14 +46,14 @@ test('filters cards by label', async (done) => {
   done()
 })
 
-test('calculate stats per list', async (done) => {
+test('calculate effort per list', async (done) => {
   const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
   const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const listName = 'todo'
-  const {lists, statsPerList} = await main({key, token}, {boardName, listName})
+  const {lists, effortPerList} = await main({key, token}, {boardName, listName, showEffort: true})
   ok(lists)
   equal(lists.length, 1)
-  equal(statsPerList.length, 1)
-  equal(Object.keys(statsPerList[0]).length, 3)
+  equal(effortPerList.length, 1)
+  equal(Object.keys(effortPerList[0]).length, 3)
   done()
 })

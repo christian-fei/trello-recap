@@ -35,6 +35,9 @@ Get the keys from here: https://trello.com/app-key
 
 `--label` is optional, filter cards by label (e.g. `bug`)
 
+`--effort` is optional, if `yes` or `y` will calculate effort by label
+
+
 ```
 # set env variables
 TRELLO_API_KEY=<YOUR_TRELLO_API_KEY>
@@ -69,3 +72,11 @@ Filter cards assigned to a member
 #### --list
 
 Filter lists by name
+
+#### --label
+
+Filter lists by label
+
+#### --effort
+
+Calculates efforts by label
