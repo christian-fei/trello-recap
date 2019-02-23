@@ -11,9 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "debug": "^4.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "m.test": "0.0.58"
   }
