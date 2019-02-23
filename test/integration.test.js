@@ -4,11 +4,12 @@ const main = require('..')
 const boardName = 'trello-recap-integration-tests'
 const member = 'christianfei1'
 
+const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
+const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
+
 // here is the public board used in the tests: https://trello.com/b/www9vXPI/trello-recap-integration-tests
 
 test('loads cards, lists and members from board', async (done) => {
-  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
-  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const { cards, lists, members } = await main({ key, token }, { boardName })
   assert.ok(cards)
   assert.strictEqual(cards.length, 4)
@@ -20,8 +21,6 @@ test('loads cards, lists and members from board', async (done) => {
 })
 
 test('filters cards by member', async (done) => {
-  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
-  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const { cards } = await main({ key, token }, { boardName, member })
   assert.ok(cards)
   assert.strictEqual(cards.length, 2)
@@ -29,8 +28,6 @@ test('filters cards by member', async (done) => {
 })
 
 test('filters lists by name', async (done) => {
-  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
-  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const listName = 'done'
   const { lists } = await main({ key, token }, { boardName, listName })
   assert.ok(lists)
@@ -39,8 +36,6 @@ test('filters lists by name', async (done) => {
 })
 
 test('filters cards by label', async (done) => {
-  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
-  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const labelName = 'bug'
   const { cards } = await main({ key, token }, { boardName, labelName })
   assert.ok(cards)
@@ -49,8 +44,6 @@ test('filters cards by label', async (done) => {
 })
 
 test('calculate effort per list', async (done) => {
-  const key = process.env.TRELLO_API_KEY || process.env.npm_config_TRELLO_API_KEY
-  const token = process.env.TRELLO_API_TOKEN || process.env.npm_config_TRELLO_API_TOKEN
   const { lists, effortPerList } = await main({ key, token }, { boardName, showEffort: true })
   assert.ok(lists)
   assert.strictEqual(lists.length, 3)
