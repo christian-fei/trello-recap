@@ -24,7 +24,7 @@ function help () {
   --member is optional, username of a member (e.g. christianfei)
 
   --list is optional, filter lists by name (e.g. done)
-  
+
   --label is optional, filter cards by label (e.g. bug)
 
   --effort is optional, if 'yes' or 'y' will calculate effort by label
@@ -40,7 +40,7 @@ async function main () {
     process.stderr.write(help())
     process.exit(1)
   }
-  const {board: boardName, since, member, list: listName, label: labelName, effort: showEffort} = parseArgv(process.argv)
+  const { board: boardName, since, member, list: listName, label: labelName, effort: showEffort } = parseArgv(process.argv)
 
   if (!boardName) {
     process.stderr.write(`Please provide a valid board name`)
@@ -49,7 +49,7 @@ async function main () {
   }
 
   process.stdout.write(`Loading cards for ${boardName}\n`)
-  const result = await trelloRecap({key, token}, {boardName, since, member, listName, labelName, showEffort})
+  const result = await trelloRecap({ key, token }, { boardName, since, member, listName, labelName, showEffort })
 
   if (result.errors) {
     process.stderr.write(JSON.stringify(result.errors))
@@ -60,7 +60,7 @@ async function main () {
   result.listsSorted.forEach((list, index) => {
     if (!result.cardsPerList[list.id]) return
     process.stdout.write('\n')
-    process.stdout.write(toMD({type: 'h1', text: listToString(list)}))
+    process.stdout.write(toMD({ type: 'h1', text: listToString(list) }))
     process.stdout.write('\n')
     if (showEffort && result.effortPerList) process.stdout.write(effortToString(result.effortPerList[index]))
     for (const card of result.cardsPerList[list.id]) {
@@ -80,5 +80,5 @@ function effortToString (effort) {
   const effortString = 'Effort:\n' + Object.keys(effort).reduce((acc, key) => {
     return acc.concat(`${key}: ${effort[key]}\n`)
   }, '')
-  return toMD({type: 'h2', text: effortString + '\n'})
+  return toMD({ type: 'h2', text: effortString + '\n' })
 }
