@@ -59,10 +59,10 @@ async function main () {
 
   result.listsSorted.forEach((list, index) => {
     if (!result.cardsPerList[list.id]) return
+    if (showEffort && result.effortPerList) process.stdout.write(effortToString(result.effortPerList[index]))
     process.stdout.write('\n')
     process.stdout.write(toMD({ type: 'h1', text: listToString(list) }))
     process.stdout.write('\n')
-    if (showEffort && result.effortPerList) process.stdout.write(effortToString(result.effortPerList[index]))
     for (const card of result.cardsPerList[list.id]) {
       process.stdout.write(cardToString(card))
     }
