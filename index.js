@@ -20,7 +20,7 @@ async function main ({ key, token }, { boardName, since, member, listName, label
 
   const members = await getBoardMembers({ key, token }, boardId)
   let lists = await getBoardLists({ key, token }, boardId)
-  lists = listName ? lists.filter(l => listName && l.name.toLowerCase().includes(listName)) : lists
+  lists = listName ? lists.filter(l => listName && l.name.toLowerCase().includes(listName.toLowerCase())) : lists
   const listsSorted = lists.sort((l1, l2) => l1.pos - l2.pos)
 
   let cards = await getBoardCards({ key, token }, { boardId, since })
